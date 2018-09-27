@@ -20,7 +20,8 @@ for (let i = 1; i <= 100; i++) {
   };
   var a = faker.random.number();
   // adding cities
-  for (let i = 0; i < faker.random.number({ min: 80, max: 200 }); i++) {
+  for (let i = 0; i < faker.random.number({ min: 8, max: 20 }); i++) {
+    // for (let i = 0; i < faker.random.number({ min: 80, max: 200 }); i++) {
     newArtist.about.Where[faker.address.city()] = faker.random.number({
       min: 1000,
       max: 100000
