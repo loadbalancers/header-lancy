@@ -15,7 +15,6 @@ db.once("open", () => {
   console.log("MONGOOSE CONNECTED!");
 });
 
-// const headerDBSchema = new mongoose.Schema({
 const artistSchema = new mongoose.Schema({
   artistID: {
     type: Number,
@@ -31,8 +30,18 @@ const artistSchema = new mongoose.Schema({
   }
 });
 
-// const HeaderDB = mongoose.model("HeaderDB", headerDBSchema);
 const Artists = mongoose.model("Artists", artistSchema);
+
+// Newly added
+const createArtist = function(newArtist, callback) {
+  Artists.create(newArtist, function(err, newData) {
+    if (err) {
+      callback(err, null);
+    } else {
+      callback(null, newData);
+    }
+  });
+};
 
 // Newly refactored
 const getArtist = function(artistID, callback) {
@@ -45,8 +54,33 @@ const getArtist = function(artistID, callback) {
   });
 };
 
+// Newly added
+const updateArtist = function(artistID, newArtist, callback) {
+  Artists.update({ artistID: artistID }, newArtist, (err, newData) => {
+    if (err) {
+      callback(err, null);
+    } else {
+      callback(null, newData);
+    }
+  });
+};
+
+// Newly added: all with ES6's syntax
+const deleteArtist = function(artistID, callback) {
+  Artists.remove({ artistID: artistID }, (err, artist) => {
+    if (err) {
+      callback(err, null);
+    } else {
+      callback(null, artist);
+    }
+  });
+};
+
 // module.exports.Artists = Artists;
+module.exports.createArtist = createArtist;
 module.exports.getArtist = getArtist;
+module.exports.deleteArtist = deleteArtist;
+module.exports.updateArtist = updateArtist;
 
 // NOTE: To be used later
 // const userSchema = new mongoose.Schema({
