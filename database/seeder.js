@@ -5,7 +5,6 @@
 const jsonfile = require("jsonfile");
 const fs = require("fs");
 
-/*
 // Step 1: generate data, then load it to local storage file
 const stream = fs.createWriteStream("./database/artists.json");
 const maxChunk = 10000; // Set to be 25K (or 50K), later
@@ -93,7 +92,6 @@ stream.write("]}");
 //     })
 //     .catch(error => console.log(error));
 // }
-*/
 
 // Step 2: load data from local file to MongoDB's table
 const readStream = fs.createReadStream("./database/artists.json");
