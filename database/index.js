@@ -1,10 +1,21 @@
-const mongoose = require("mongoose");
 // [Todo] Create my own account on mlab.com
 // mongoose.connect('mongodb://david:password1234@ds111113.mlab.com:11113/spotify-header');
+
+const mongoose = require("mongoose");
+
+// Newly modified
+const options = {
+  useNewUrlParser: true,
+  socketTimeoutMS: 30000,
+  keepAlive: true,
+  reconnectTries: 30000
+};
+
 mongoose.connect(
   // "mongodb://localhost/dotThen",
   "mongodb://localhost/skyBeat",
-  { useNewUrlParser: true }
+  // { useNewUrlParser: true }
+  options
 );
 
 const db = mongoose.connection;
@@ -12,7 +23,7 @@ db.on("error", error => {
   console.error(error);
 });
 db.once("open", () => {
-  console.log("MONGOOSE CONNECTED!");
+  console.log("Connected to Mongoose!");
 });
 
 const artistSchema = new mongoose.Schema({
@@ -76,11 +87,14 @@ const deleteArtist = function(artistID, callback) {
   });
 };
 
-// module.exports.Artists = Artists;
+// For server's index.js
 module.exports.createArtist = createArtist;
 module.exports.getArtist = getArtist;
 module.exports.deleteArtist = deleteArtist;
 module.exports.updateArtist = updateArtist;
+
+// For seeder.js, one-time use
+module.exports.Artists = Artists;
 
 // NOTE: To be used later
 // const userSchema = new mongoose.Schema({

@@ -10,6 +10,9 @@ npm
 npm-debug.log
 node_modules/
 
+## database's large file, artists.json ##
+database/artists.json
+
 pids
 *.pid
 logs
