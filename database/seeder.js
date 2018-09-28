@@ -79,6 +79,7 @@ for (let j = 1; j <= rounds; j++) {
 }
 stream.write("]}");
 
+
 // Step 2: load data from local file to MongoDB's table
 const readStream = fs.createReadStream("./database/artists.json");
 const controller = require("./index.js"); // Importing DB's controller, for step 2(b)
