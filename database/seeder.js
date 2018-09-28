@@ -79,20 +79,6 @@ for (let j = 1; j <= rounds; j++) {
 }
 stream.write("]}");
 
-// for (let j = 0; j < 10; j++) {
-//   console.log("Chunk number " + j);
-//   jsonfile
-//     .writeFile(
-//       "./database/artists.json",
-//       generateArtists(10),
-//       { flag: "a" }
-//     )
-//     .then(res => {
-//       console.log("Write complete");
-//     })
-//     .catch(error => console.log(error));
-// }
-
 // Step 2: load data from local file to MongoDB's table
 const readStream = fs.createReadStream("./database/artists.json");
 const controller = require("./index.js"); // Importing DB's controller, for step 2(b)
@@ -133,9 +119,20 @@ function insertArtists(artistsFromFile) {
 /*
   Previous/old scripts
 */
-// Option 3: use initializeOrderedBulkOp()
-// let bulk = controller.Artists.collection.initializeOrderedBulkOp();
-// let counter = 0;
+
+// Script used for option 2's step 1(b)
+// for (let j = 0; j < 10; j++) {
+//   console.log("Chunk number " + j);
+//   jsonfile
+//     .writeFile(
+//       "./database/artists.json",
+//       generateArtists(10),
+//       { flag: "a" }
+//     )
+//     .then(res => {
+//       console.log("Write complete");
+//     })
+//     .catch(error => console.log(error));
 // }
 
 // Original option: for inserting 100 records
