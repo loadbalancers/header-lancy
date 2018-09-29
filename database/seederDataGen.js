@@ -1,14 +1,16 @@
-// Note: Biography and Where fields do not need to start with upper case, though I won't change them (due to high effort, low reward)
+// Step 1 (of seeder): generate data, then load it to local storage file
 
-// For both steps below: write and read with local path
-// Note: stream also works for non-objects
-const jsonfile = require("jsonfile");
+// const jsonfile = require("jsonfile");
 const fs = require("fs");
 
-// Step 1: generate data, then load it to local storage file
-const stream = fs.createWriteStream("./database/artists.json");
-const maxChunk = 10; // Set to be 25K (or 50K), later
-const rounds = 10;
+// const stream = fs.createWriteStream("./artists.json");
+// const maxChunk = 25000;
+// const rounds = 40;
+
+// For testing: with 100K now
+const stream = fs.createWriteStream("./artistsTest.json");
+const maxChunk = 25000;
+const rounds = 4;
 
 // 1(a): generate data
 const faker = require("faker");
@@ -25,6 +27,7 @@ function generateArtists(mc, currentRound) {
       followersNumber: "PLACE_HOLDER",
       verified: Math.round(Math.random() * 0.7 + 0.3) ? true : false,
       artistImages: [],
+      // Note: Biography and Where fields do not need to start with upper case, though I won't change them (due to high effort, low reward)
       about: {
         Biography: faker.lorem.paragraphs(
           // Newly modified: reduced the number of paragraphs, for DB performance
@@ -79,47 +82,9 @@ for (let j = 1; j <= rounds; j++) {
 }
 stream.write("]}");
 
-// Step 2: load data from local file to MongoDB's table
-const readStream = fs.createReadStream("./database/artists.json");
-const controller = require("./index.js"); // Importing DB's controller, for step 2(b)
-
-// 2(a): Load data from local file
-// Note: need to invoke step 2(b) in 2(a), because obj only exists in 2(a)'s context (object is copy by reference)
-
-// for (let k = 0; k < 10; k++) {
-jsonfile
-  .readFile("./database/artists.json")
-  // , function(err, obj) {
-  //   if (err) {
-  //     console.log(err);
-  //   } else {
-  //     console.log("Read complete");
-  //     console.log("Type of obj " + typeof obj.artists);
-  //     insertArtists(obj.artists);
-  //   }
-  // });
-  .then(obj => {
-    console.log("Read complete");
-    insertArtists(obj.artists[0]);
-    // console.log("obj.artists is array: " + Array.isArray(obj.artists)); // Type is array
-  })
-  .catch(error => console.log(error));
-// }
-
-// 2(b): Insert data to DB table
-// Note: no need to use Promise here, Promise is just a wrapper for callbacks
-function insertArtists(artistsFromFile) {
-  controller.Artists.insertMany(artistsFromFile, function(err) {
-    if (err) {
-      console.log(err);
-    }
-  });
-}
-
 /*
   Previous/old scripts
 */
-
 // Script used for option 2's step 1(b)
 // for (let j = 0; j < 10; j++) {
 //   console.log("Chunk number " + j);
@@ -133,10 +98,4 @@ function insertArtists(artistsFromFile) {
 //       console.log("Write complete");
 //     })
 //     .catch(error => console.log(error));
-// }
-
-// Original option: for inserting 100 records
-// controller.Artists.create(newArtist, function(err, newData) {
-//   err ? console.error(error) : console.log(newData);
-// });
 // }
