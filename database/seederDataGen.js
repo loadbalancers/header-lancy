@@ -3,22 +3,30 @@
 // const jsonfile = require("jsonfile");
 const fs = require("fs");
 
-// const stream = fs.createWriteStream("./artists.json");
-// const maxChunk = 25000;
-// const rounds = 40;
+// Note: writeStream method does not need chunks
+// So instead treat chunks as separate files (10 files in total)
+// const filePath = "../local_files/artists";
+// const maxChunk = 100000;
+// const files = 100;
 
 // For testing: with 100K now
-const stream = fs.createWriteStream("./artistsTest.json");
-const maxChunk = 25000;
-const rounds = 4;
+const filePath = "../local_files/artistsTest"; // const stream = fs.createWriteStream("./artistsTest.json");
+const maxChunk = 100;
+// const rounds = 1;
+const files = 1;
+
+// [TBD] Increase this later
+var max_photos = 100; // 27
 
 // 1(a): generate data
 const faker = require("faker");
 faker.locale = "en_US";
 
-function generateArtists(mc, currentRound) {
+// function generateArtists(mc, currentRound) {
+function generateArtists(mc, fileNumber) {
   let artistsArr = [];
-  let startingIndex = 1 + (currentRound - 1) * mc;
+  // let startingIndex = 1 + (currentRound - 1) * mc;
+  let startingIndex = 1 + (fileNumber - 1) * mc;
   for (let i = startingIndex; i <= startingIndex + mc - 1; i++) {
     let newArtist = {
       artistID: i,
@@ -49,14 +57,17 @@ function generateArtists(mc, currentRound) {
     var obj = {};
     // Newly modified: reduced the number of photos per artist, for DB performance
     for (let i = 1; i <= faker.random.number({ min: 2, max: 5 }); i++) {
-      obj[faker.random.number({ min: 1, max: 27 })] = faker.random.number({
+      obj[
+        faker.random.number({ min: 1, max: max_photos })
+      ] = faker.random.number({
         min: 1,
-        max: 27
+        max: max_photos
       });
     }
     Object.values(obj).forEach(num => {
       newArtist.artistImages.push(
-        `https://s3-us-west-1.amazonaws.com/spotifycloneartists/photos/${num}.jpg` // S3 urls
+        // `https://s3-us-west-1.amazonaws.com/spotifycloneartists/photos/${num}.jpg` // David's S3 urls
+        `https://s3-us-west-1.amazonaws.com/skybeat/photos/${num}.jpg` // My S3 urls; 10 photos for now
       );
     });
     // Get number of followers
@@ -70,17 +81,13 @@ function generateArtists(mc, currentRound) {
 }
 
 // 1(b): append data to local file
-stream.write('{"artists":[');
-for (let j = 1; j <= rounds; j++) {
-  console.log("Round number " + j);
-  let newString = generateArtists(maxChunk, j);
-  if (j < rounds) {
-    stream.write(newString.substring(1, newString.length - 1) + ",");
-  } else {
-    stream.write(newString.substring(1, newString.length - 1));
-  }
+for (let k = 1; k <= files; k++) {
+  const stream = fs.createWriteStream(`${filePath}${k}.json`);
+  stream.write('{"artists":[');
+  let newString = generateArtists(maxChunk, k);
+  stream.write(newString.substring(1, newString.length - 1));
+  stream.write("]}");
 }
-stream.write("]}");
 
 /*
   Previous/old scripts
