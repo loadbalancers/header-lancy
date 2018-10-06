@@ -6,9 +6,10 @@
   "license": "UNLICENSED",
   "scripts": {
     "seed": "node database/seeder.js",
-    "start": "nodemon server/index.js",
+    "start": "nodemon server/server_pg.js",
     "dev": "node server/index.js",
     "test": "jest --watch",
+    "react-dev": "webpack --config webpack.config.js -d --watch",
     "build": "webpack --config webpack.prod.js"
   },
   "dependencies": {

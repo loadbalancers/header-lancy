@@ -14,6 +14,16 @@ const sequelize = new Sequelize("skyBeat", "", "", {
   logging: false
 });
 
+// Test connection
+sequelize
+  .authenticate()
+  .then(() => {
+    console.log("Connection has been established successfully.");
+  })
+  .catch(err => {
+    console.error("Unable to connect to the database:", err);
+  });
+
 /*
 		Define schemas for my tables, as below
 */
@@ -46,18 +56,11 @@ const Location = sequelize.define(
   { createdAt: false, updatedAt: false }
 );
 
-// Test connection
-sequelize
-  .authenticate()
-  .then(() => {
-    console.log("Connection has been established successfully.");
-  })
-  .catch(err => {
-    console.error("Unable to connect to the database:", err);
-  });
-
 // Artist.sync();
-Location.sync();
+// Location.sync();
+
+// module.exports.Artist = Artist;
+// module.exports.Location = Location;
 
 /*
   Previous/old scripts

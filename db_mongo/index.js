@@ -1,4 +1,4 @@
-// [Todo] Create my own account on mlab.com
+// [TBD] Create my own account on mlab.com
 // mongoose.connect('mongodb://david:password1234@ds111113.mlab.com:11113/spotify-header');
 
 const mongoose = require("mongoose");

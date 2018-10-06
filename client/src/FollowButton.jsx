@@ -1,8 +1,8 @@
-import React, { Component } from 'react';
-import PropTypes from 'prop-types';
-import { hot } from 'react-hot-loader';
-import headerStyle from './styles/header.css';
-import classNames from 'classnames';
+import React, { Component } from "react";
+import PropTypes from "prop-types";
+import { hot } from "react-hot-loader";
+import headerStyle from "./styles/header.css";
+import classNames from "classnames";
 
 const FollowBtnClass = isFollowed =>
   classNames(headerStyle.textButton, headerStyle.follow, {
@@ -25,9 +25,18 @@ class FollowButton extends Component {
   }
 
   render() {
-    const BtnTXT = this.props.artist.followed ? (this.state.hover ? 'UNFOLLOW' : 'FOLLOWING') : 'FOLLOW';
+    const BtnTXT = this.props.followed
+      ? this.state.hover
+        ? "UNFOLLOW"
+        : "FOLLOWING"
+      : "FOLLOW";
     return (
-      <button className={FollowBtnClass(this.props.artist.followed)} onClick={this.props.handleFollowToggle} onMouseEnter={this.hoverToggle} onMouseLeave={this.hoverToggle}>
+      <button
+        className={FollowBtnClass(this.props.followed)}
+        onClick={this.props.handleFollowToggle}
+        onMouseEnter={this.hoverToggle}
+        onMouseLeave={this.hoverToggle}
+      >
         {BtnTXT}
       </button>
     );

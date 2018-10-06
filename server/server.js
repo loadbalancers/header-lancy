@@ -9,7 +9,7 @@ app.use(cors());
 app.use(bodyParser.json());
 app.use(express.static(__dirname + "/../public/dist"));
 
-const controller = require("../database/index.js");
+const controller = require("../db_mongo/index.js");
 
 // [CRUD] POST, for Creat: newly added
 app.post("/artists", (req, res) => {

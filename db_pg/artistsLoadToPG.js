@@ -54,11 +54,14 @@ const query2 = {
 // query3: index DB table by artist ID
 // Note: only need to do this once
 const query3 = {
-  text: `CREATE INDEX id_index ON artists USING HASH ("artistID")`
+  text: `CREATE INDEX artist_index ON artists USING HASH ("artistID")`
+};
+const query4 = {
+  text: `CREATE INDEX artist_index_locations ON locations USING HASH ("artistID")`
 };
 
 // client: works with all queries, as above
-client.query(query3, (err, res) => {
+client.query(query4, (err, res) => {
   if (err) {
     console.log(err);
   } else {
