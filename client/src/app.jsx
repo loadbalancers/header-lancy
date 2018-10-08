@@ -26,8 +26,6 @@ const getLocationsInfo = function(id, callback) {
     });
 };
 
-const blackBG = { backgroundColor: "#191414" };
-
 class App extends Component {
   constructor() {
     super();
@@ -45,12 +43,17 @@ class App extends Component {
     this.handleFollowToggle = this.handleFollowToggle.bind(this);
   }
 
-  // [TBD] Adjust this helper function, to get numbers in less than 1000 for example
+  // Adjusted this helper function, to get numbers in less than 1000 for example
   // Note: inclusive for both numbers
   getRandomInt(min, max) {
     min = Math.ceil(min);
     max = Math.floor(max + 1);
-    return Math.floor(Math.random() * (max - min)) + min;
+    let random = Math.random();
+    if (Math.random() < 0.5) {
+      return Math.floor((random / 1000) * (max - min)) + min;
+    } else {
+      return Math.floor(random * (max - min)) + min;
+    }
   }
 
   componentDidMount() {
@@ -58,7 +61,7 @@ class App extends Component {
     //   this.setState({ artistDisp: responseData });
     // });
 
-    let id = this.getRandomInt(1, 100000);
+    let id = this.getRandomInt(1, 10000000); // Between 1 and 10M
     let context = this; // Newly added
 
     getArtistInfo(id, function(data) {

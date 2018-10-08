@@ -1,3 +1,5 @@
+require("newrelic"); // Newly added, for reporting
+
 const express = require("express");
 const cors = require("cors");
 require("console-stamp")(console, "HH:MM:ss.l");
@@ -12,17 +14,15 @@ app.use(express.static(__dirname + "/../public/dist"));
 const controller = require("../db_pg/index_pg.js");
 
 // [CRUD] POST, for Creat: newly added
-// app.post("/artists", (req, res) => {
-//   // res.status(400).send({ ERROR: "does not accept post request" });
-//   controller.createArtist(req.body.newArtist, (err, newData) => {
-//     if (err) {
-//       res.status(500).send("Error, in posting data to DB");
-//     } else {
-//       res.status(201).json(newData);
-//       console.log("newData: " + newData);
-//     }
-//   });
-// });
+app.post("/artists", (req, res) => {
+  controller.createArtist(req.body.newArtist, (err, newData) => {
+    if (err) {
+      res.status(500).send("Error, in posting data to DB");
+    } else {
+      res.status(201);
+    }
+  });
+});
 
 // [CRUD] GET, for Read: newly re-factored
 app.get("/artists/:artistID", (req, res) => {
@@ -41,6 +41,7 @@ app.get("/artists/:artistID", (req, res) => {
   });
 });
 
+// [CRUD] GET
 app.get("/locations/:artistID", (req, res) => {
   let artistID = req.params.artistID;
   console.log("Receiving GET request, with artist ID " + artistID);
@@ -59,31 +60,34 @@ app.get("/locations/:artistID", (req, res) => {
 
 // [CRUD] PUT, for update: newly added
 // Note: the updated artist can have a different artist ID
-// app.put("/artists/:artistID", (req, res) => {
-//   let artistID = req.params.artistID;
-//   controller.updateArtist(artistID, req.body.newArtist, (err, newData) => {
-//     if (err) {
-//       res.status(500).send("Error, in updating data in DB");
-//     } else {
-//       res
-//         .status(200)
-//         .send("Success, updated artist's data to " + JSON.stringify(newData));
-//     }
-//   });
-// });
+app.put("/artists/:artistID", (req, res) => {
+  let artistID = req.params.artistID;
+  controller.updateArtist(artistID, req.body.newArtist, (err, newData) => {
+    if (err) {
+      res.status(500).send("Error, in updating data in DB");
+    } else {
+      res
+        .status(200)
+        .send("Success, updated artist's data to " + JSON.stringify(newData));
+    }
+  });
+});
 
 // [CRUD] Delete: newly added; all with ES6's syntax
-// app.delete("/artists/:artistID", (req, res) => {
-//   let artistID = req.params.artistID;
-//   console.log("Receiving DELETE request, with artist ID " + artistID);
-//   controller.deleteArtist(artistID, (err, data) => {
-//     if (err) {
-//       res.status(404).send("Error, artist ID is not found");
-//     } else {
-//       res.status(204).send("Artist " + data + " is deleted");
-//     }
-//   });
-// });
+app.delete("/artists/:artistID", (req, res) => {
+  let artistID = req.params.artistID;
+  console.log("Receiving DELETE request, with artist ID " + artistID);
+  controller.deleteArtist(artistID, (err, data) => {
+    if (err) {
+      res.status(404).send("Error, artist ID is not found");
+      // console.log(err);
+    } else {
+      // Note: status code 204 does not send any message; so console.log is needed
+      res.status(204);
+      console.log("Artist is deleted, with " + JSON.stringify(data));
+    }
+  });
+});
 
 // Server listens on port 3004
 app.listen(process.env.PORT || 3004, function onStart(err) {
