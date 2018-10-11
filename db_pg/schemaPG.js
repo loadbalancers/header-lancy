@@ -1,17 +1,27 @@
-// Note: this script (with Sequelize) is only used for defining tables' schema
+// Note: this script (with Sequelize) is ONLY used for defining tables' schema
 
 const Sequelize = require("sequelize");
-const sequelize = new Sequelize("skyBeat", "", "", {
-  host: "localhost",
+
+// Connection 1: to Postgres DB locally
+// const sequelize = new Sequelize("skyBeat", "", "", {
+//   host: "localhost",
+//   dialect: "postgres",
+//   operatorsAliases: false,
+//   pool: {
+//     max: 50, // Note: increased this from 5 to 50
+//     min: 0,
+//     acquire: 30000,
+//     idle: 10000
+//   },
+//   logging: false
+// });
+
+// Connection 2: to Postgres DB on EC2 (the cloud)
+const sequelize = new Sequelize("skybeat", "postgres", "$password", {
+  host: "ec2-13-57-179-209.us-west-1.compute.amazonaws.com",
+  port: 5432,
   dialect: "postgres",
-  operatorsAliases: false,
-  pool: {
-    max: 50, // Note: increased this from 5 to 50
-    min: 0,
-    acquire: 30000,
-    idle: 10000
-  },
-  logging: false
+  operatorsAliases: false
 });
 
 // Test connection
@@ -56,8 +66,8 @@ const Location = sequelize.define(
   { createdAt: false, updatedAt: false }
 );
 
-// Artist.sync();
-// Location.sync();
+Artist.sync();
+Location.sync();
 
 // module.exports.Artist = Artist;
 // module.exports.Location = Location;

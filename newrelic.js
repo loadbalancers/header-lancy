@@ -9,7 +9,7 @@ exports.config = {
   /**
    * Array of application names.
    */
-  app_name: ["Proxy"], // ['My Application'],
+  app_name: ["SkyBeat Header"], // ['My Application'],
   /**
    * Your New Relic license key.
    */

@@ -8,33 +8,50 @@
 // Note: switched from Sequelize to pg (npm module)
 // const controller = require("./pgSchema.js");
 const { Client } = require("pg");
-const connectionString = "postgresql://:@localhost:5432/skyBeat";
-const client = new Client(connectionString);
+
+// Connection 1: to Postgres DB locally
+// const connectionString = "postgresql://:@localhost:5432/skyBeat";
+// const client = new Client(connectionString);
+
+// Connection 2: to Postgres DB on EC2 (the cloud)
+const connectionToEC2 = {
+  user: "postgres",
+  host: "ec2-13-57-179-209.us-west-1.compute.amazonaws.com",
+  database: "skybeat",
+  password: "$password",
+  port: 5432
+};
+const client = new Client(connectionToEC2);
+
 client.connect();
 
 // Step 2(a): load data to DB tables
 // Note: somehow absolute (not relative) file path is need here
-const inputFilePath = "/Users/huanl/Desktop/header-lancy/local_files/artistsPG";
-// const inputFilePath = "../local_files/artistsTest1.json";
+
+// For connection 1
+// const inputFilePath = "/Users/huanl/Desktop/header-lancy/local_files/artistsPG";
+
+// For connection 2
+const inputFilePath = "/home/ec2-user/data/artistsPG";
 
 const files = 10;
 
-// for (let i = 1; i <= files; i++) {
-//   client.query(
-//     `COPY artists FROM '${inputFilePath}${i}.csv' DELIMITER ',' CSV HEADER`,
-//     (err, res) => {
-//       if (err) {
-//         console.log(err);
-//       } else {
-//         console.log(res); // console.log(res.rows[1]);
-//         console.log("Finished loading file number " + i);
-//         if (i === files) {
-//           client.end();
-//         }
-//       }
-//     }
-//   );
-// }
+for (let i = 1; i <= files; i++) {
+  client.query(
+    `COPY artists FROM '${inputFilePath}${i}.csv' DELIMITER ',' CSV HEADER`,
+    (err, res) => {
+      if (err) {
+        console.log(err);
+      } else {
+        console.log(res); // console.log(res.rows[1]);
+        console.log("Finished loading file number " + i);
+        if (i === files) {
+          client.end();
+        }
+      }
+    }
+  );
+}
 // End the client, to track time (by terminal)
 // await client.end();
 
@@ -61,13 +78,13 @@ const query4 = {
 };
 
 // client: works with all queries, as above
-client.query(query4, (err, res) => {
-  if (err) {
-    console.log(err);
-  } else {
-    console.log(res);
-  }
-});
+// client.query(query2, (err, res) => {
+//   if (err) {
+//     console.log(err);
+//   } else {
+//     console.log(res);
+//   }
+// });
 
 /*
   Previous/old scripts, with Json file as input

@@ -1,8 +1,9 @@
-// Connect to Postgres DB
-// const db = require("./schemaPG.js");
 const { Client } = require("pg");
+
+// Connection 1: to Postgres DB locally
 const connectionString = "postgresql://:@localhost:5432/skyBeat";
 const client = new Client(connectionString);
+
 client.connect();
 
 // [CRUD] POST, for Creat
