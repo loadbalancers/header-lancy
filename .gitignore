@@ -11,7 +11,9 @@ npm-debug.log
 node_modules/
 
 ## database's large file, artists.json ##
+local_files/
 database/artists.json
+database/artistsTest.json
 
 pids
 *.pid

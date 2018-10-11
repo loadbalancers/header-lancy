@@ -1,4 +1,4 @@
-// [Todo] Create my own account on mlab.com
+// [TBD] Create my own account on mlab.com
 // mongoose.connect('mongodb://david:password1234@ds111113.mlab.com:11113/spotify-header');
 
 const mongoose = require("mongoose");
@@ -26,14 +26,16 @@ db.once("open", () => {
   console.log("Connected to Mongoose!");
 });
 
+// Note: does not have the field, Verified, here (but in the seeding script)
 const artistSchema = new mongoose.Schema({
   artistID: {
     type: Number,
     unique: true
   },
-  followed: Boolean,
   artistName: String,
+  followed: Boolean,
   followersNumber: Number,
+  // verified: Boolean,
   artistImages: [String],
   about: {
     Biography: String,
