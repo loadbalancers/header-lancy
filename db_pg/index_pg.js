@@ -1,8 +1,18 @@
 const { Client } = require("pg");
 
 // Connection 1: to Postgres DB locally
-const connectionString = "postgresql://:@localhost:5432/skyBeat";
-const client = new Client(connectionString);
+// const connectionString = "postgresql://:@localhost:5432/skyBeat";
+// const client = new Client(connectionString);
+
+// Connection 2: to Postgres DB on EC2 (the cloud)
+const connectionToEC2 = {
+  user: "huanl",
+  host: "ec2-13-56-211-48.us-west-1.compute.amazonaws.com",
+  database: "skybeat",
+  password: "$password",
+  port: 5432
+};
+const client = new Client(connectionToEC2);
 
 client.connect();
 
