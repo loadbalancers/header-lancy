@@ -10,6 +10,7 @@ const bodyParser = require("body-parser");
 
 const controller = require("../db_pg/index_pg.js");
 
+
 // First, check cluster is master
 if (cluster.isMaster) {
   const cpuCount = os.cpus().length;

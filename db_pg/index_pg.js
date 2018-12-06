@@ -1,24 +1,24 @@
 // Newly modified, to use pooling
-// const { Client } = require("pg");
-const { Pool } = require("pg");
+const { Client } = require("pg");
+// const { Pool } = require("pg");
 
 // Connection 1: to Postgres DB locally
-// const connectionString = "postgresql://:@localhost:5432/skyBeat";
-// const client = new Client(connectionString);
+const connectionString = "postgresql://:@localhost:5432/skyBeat";
+const client = new Client(connectionString);
 
 // Connection 2: to Postgres DB on EC2 (the cloud)
-const connectionToEC2 = {
-  user: "huanl",
-  host: "ec2-13-56-211-48.us-west-1.compute.amazonaws.com",
-  database: "skybeat",
-  password: "$password",
-  port: 5432
-};
+// const connectionToEC2 = {
+//   user: "huanl",
+//   host: "ec2-13-56-211-48.us-west-1.compute.amazonaws.com",
+//   database: "skybeat",
+//   password: "$password",
+//   port: 5432
+// };
 // const client = new Client(connectionToEC2);
-const pool = new Pool(connectionToEC2);
+// const pool = new Pool(connectionToEC2);
 
-// client.connect();
-pool.connect();
+client.connect();
+// pool.connect();
 
 // [CRUD] POST, for Creat
 const createArtist = function(newArtist, callback) {
@@ -38,8 +38,8 @@ const createArtist = function(newArtist, callback) {
 // [CRUD] GET, for Read
 const getArtist = function(artistID, callback) {
   const queryText = `SELECT * FROM artists WHERE "artistID" = ${artistID}`;
-  // client.query(queryText, function(err, res) {
-  pool.query(queryText, function(err, res) {
+  client.query(queryText, function(err, res) {
+    // pool.query(queryText, function(err, res) {
     if (err) {
       callback(err, null);
     } else {
@@ -52,8 +52,8 @@ const getArtist = function(artistID, callback) {
 // Note: result is ordered by number of people/listeners
 const getLocations = function(artistID, callback) {
   const queryText = `SELECT "artistID", "location", "people" FROM locations WHERE "artistID" = ${artistID} ORDER BY people DESC`;
-  // client.query(queryText, function(err, res) {
-  pool.query(queryText, function(err, res) {
+  client.query(queryText, function(err, res) {
+    // pool.query(queryText, function(err, res) {
     if (err) {
       callback(err, null);
     } else {

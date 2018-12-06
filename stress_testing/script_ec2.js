@@ -30,13 +30,13 @@ export default function() {
     req = [
       {
         method: "get",
-        // url: `http://54.193.126.17:3004/artists/${id}`  // Service 1
+        // url: `http://54.193.126.17:3004/artists/${id}` // Service 1
         // url: `http://54.153.126.47:3004/artists/${id}` // Service 2
         url: `http://18.144.22.249/artists/${id}` // LB (with 3 services)
       },
       {
         method: "get",
-        // url: `http://54.193.126.17:3004/locations/${id}`  // Service 1
+        // url: `http://54.193.126.17:3004/locations/${id}` // Service 1
         // url: `http://54.153.126.47:3004/locations/${id}` // Service 2
         url: `http://18.144.22.249/locations/${id}` // LB (with 3 services)
       }
